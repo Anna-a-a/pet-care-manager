@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const toggleSidebarButton = document.getElementById('toggle-sidebar');
+    const closeSidebarButton = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.querySelector('.main-content');
+
+    toggleSidebarButton.addEventListener('click', function() {
+        sidebar.classList.add('open');
+        mainContent.style.marginLeft = '250px';
+    });
+
+    closeSidebarButton.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        mainContent.style.marginLeft = '0';
+    });
+
     // Fetch and display pet owners
     fetch('/api/petOwners')
         .then(response => response.json())
@@ -68,65 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-function showAddPetOwnerForm() {
-    document.getElementById('pet-owner-form').style.display = 'block';
-}
-
-function showAddPetForm() {
-    document.getElementById('pet-form').style.display = 'block';
-}
-
-document.getElementById('add-pet-owner-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const petOwner = {
-        lastName: formData.get('last-name'),
-        firstName: formData.get('first-name'),
-        middleName: formData.get('middle-name'),
-        inn: formData.get('inn')
-    };
-
-    fetch('/api/petOwner', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(petOwner)
+function deletePetOwner(inn) {
+    fetch(`/api/petOwner/${inn}`, {
+        method: 'DELETE'
     })
     .then(response => response.json())
     .then(data => {
-        alert('Pet Owner added successfully');
+        alert('Pet Owner deleted successfully');
         location.reload();
     })
     .catch(error => console.error('Error:', error));
-});
-
-document.getElementById('add-pet-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const pet = {
-        nickname: formData.get('nickname'),
-        breed: formData.get('breed'),
-        petSpecies: formData.get('pet-species'),
-        ownerId: formData.get('owner-id'),
-        passportNumber: formData.get('passport-number')
-    };
-
-    fetch('/api/pet', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(pet)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Pet added successfully');
-        location.reload();
-    })
-    .catch(error => console.error('Error:', error));
-});
-
+}
 
 function deletePet(id) {
     fetch(`/api/pet/${id}`, {
