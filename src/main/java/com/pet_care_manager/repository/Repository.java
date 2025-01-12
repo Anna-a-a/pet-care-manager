@@ -1,6 +1,6 @@
 package com.pet_care_manager.repository;
 
-import com.pet_care_manager.model.User;
+import com.pet_care_manager.model.PetOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -21,18 +21,21 @@ public class Repository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Optional<User> getUser(Long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
-        return jdbcTemplate.query(sql, new UserRowMapper(), id).stream().findFirst();
+    public Optional<PetOwner> getPetOwner(Long id) {
+        String sql = "SELECT * FROM pet_owner WHERE id = ?";
+        return jdbcTemplate.query(sql, new PetOwnerRowMapper(), id).stream().findFirst();
     }
 
-    private static class UserRowMapper implements RowMapper<User> {
+    public class PetOwnerRowMapper implements RowMapper<PetOwner> {
         @Override
-        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-            User user = new User();
-            user.setId(rs.getLong("id"));
-            user.setName(rs.getString("name"));
-            return user;
+        public PetOwner mapRow(ResultSet rs, int rowNum) throws SQLException {
+            PetOwner petOwner = new PetOwner();
+            petOwner.setId(rs.getLong("id"));
+            petOwner.setLastName(rs.getString("last_name"));
+            petOwner.setFirstName(rs.getString("first_name"));
+            petOwner.setMiddleName(rs.getString("middle_name"));
+            petOwner.setInn(rs.getLong("inn"));
+            return petOwner;
         }
     }
 }

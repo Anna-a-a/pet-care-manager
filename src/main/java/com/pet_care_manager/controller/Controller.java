@@ -1,7 +1,7 @@
 package com.pet_care_manager.controller;
 
 
-import com.pet_care_manager.model.User;
+import com.pet_care_manager.model.PetOwner;
 import com.pet_care_manager.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +21,8 @@ public class Controller {
         this.service = service;
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(service. getUser(id));
+    @GetMapping("/petOwner/{id}")
+    public ResponseEntity<PetOwner> getPetOwnerById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getPetOwner(id));
     }
 }
