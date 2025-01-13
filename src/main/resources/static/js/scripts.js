@@ -3,106 +3,95 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSidebarButton = document.getElementById('close-sidebar');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.querySelector('.main-content');
+    const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
+    const closeModalButton = document.getElementById('closeModal');
+    const confirmDeleteButton = document.getElementById('confirmDelete');
+    const cancelDeleteButton = document.getElementById('cancelDelete');
+    const visitsCards = document.getElementById('visits-cards');
 
-    toggleSidebarButton.addEventListener('click', function() {
+    let visitIdToDelete = null;
+
+    // Открытие и закрытие бокового меню
+    toggleSidebarButton.addEventListener('click', () => {
         sidebar.classList.add('open');
         mainContent.style.marginLeft = '250px';
     });
 
-    closeSidebarButton.addEventListener('click', function() {
+    closeSidebarButton.addEventListener('click', () => {
         sidebar.classList.remove('open');
         mainContent.style.marginLeft = '0';
     });
 
-    // Fetch and display pet owners
-    fetch('/api/petOwners')
-        .then(response => response.json())
-        .then(data => {
-            const petOwnersList = document.getElementById('pet-owners-list');
-            data.forEach(owner => {
-                const ownerElement = document.createElement('div');
-                ownerElement.innerHTML = `
-                    <h3>${owner.firstName} ${owner.lastName}</h3>
-                    <p>INN: ${owner.inn}</p>
-                    <button onclick="deletePetOwner(${owner.inn})">Delete</button>
-                `;
-                petOwnersList.appendChild(ownerElement);
-            });
-        });
+    // Открытие модального окна подтверждения удаления
+    function openDeleteConfirmation(visitId) {
+        visitIdToDelete = visitId;
+        deleteConfirmationModal.style.display = 'block';
+    }
 
-    // Fetch and display pets
-    fetch('/api/pets')
-        .then(response => response.json())
-        .then(data => {
-            const petsList = document.getElementById('pets-list');
-            data.forEach(pet => {
-                const petElement = document.createElement('div');
-                petElement.innerHTML = `
-                    <h3>${pet.nickname}</h3>
-                    <p>Breed: ${pet.breed}</p>
-                    <p>Species: ${pet.petSpecies}</p>
-                    <p>Passport Number: ${pet.passportNumber}</p>
-                    <button onclick="deletePet(${pet.id})">Delete</button>
-                `;
-                petsList.appendChild(petElement);
-            });
-        });
+    // Закрытие модального окна
+    function closeDeleteModal() {
+        deleteConfirmationModal.style.display = 'none';
+    }
 
-    // Fetch and display veterinarians
-    fetch('/api/veterinarians')
-        .then(response => response.json())
-        .then(data => {
-            const veterinariansList = document.getElementById('veterinarians-list');
-            data.forEach(vet => {
-                const vetElement = document.createElement('div');
-                vetElement.innerHTML = `
-                    <h3>${vet.firstName} ${vet.lastName}</h3>
-                    <p>Specialization: ${vet.specialization}</p>
-                `;
-                veterinariansList.appendChild(vetElement);
-            });
-        });
+    // Закрытие модального окна через кнопку
+    closeModalButton.addEventListener('click', closeDeleteModal);
+    cancelDeleteButton.addEventListener('click', closeDeleteModal);
 
-    // Fetch and display visits
-    fetch('/api/visits')
-        .then(response => response.json())
-        .then(data => {
-            const visitsList = document.getElementById('visits-list');
-            data.forEach(visit => {
-                const visitElement = document.createElement('div');
-                visitElement.innerHTML = `
-                    <h3>Visit Date: ${visit.visitDate}</h3>
-                    <p>Pet ID: ${visit.petId}</p>
-                    <p>Veterinarian ID: ${visit.veterinarianId}</p>
-                    <p>Diagnosis: ${visit.diagnosis}</p>
-                    <p>Treatment: ${visit.treatment}</p>
-                    <p>Doctor Comments: ${visit.doctorComments}</p>
-                `;
-                visitsList.appendChild(visitElement);
-            });
-        });
+    // Удаление визита
+    confirmDeleteButton.addEventListener('click', () => {
+        if (visitIdToDelete !== null) {
+            fetch(`/api/deleteVisit/${visitIdToDelete}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        closeDeleteModal();
+                        fetchVisits(); // Перезагрузка списка визитов
+                    } else {
+                        alert('Ошибка при удалении визита');
+                    }
+                })
+                .catch(error => console.error('Ошибка при удалении визита:', error));
+        }
+    });
+
+    // Получение списка визитов
+    function fetchVisits() {
+        fetch('/api/visits')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки визитов: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                visitsCards.innerHTML = ''; // Очистка контейнера
+                data.forEach(visit => {
+                    const visitCard = document.createElement('div');
+                    visitCard.className = 'visit-card';
+                    visitCard.innerHTML = `
+                        <button class="edit-button"><i class="fas fa-edit"></i></button>
+                        <h3>Визит от ${new Date(visit.visitDate).toLocaleDateString()}</h3>
+                        <div class="visit-info">
+                            <div><label>ID Животного:</label> <span>${visit.petId}</span></div>
+                            <div><label>ID Ветеринара:</label> <span>${visit.veterinarianId}</span></div>
+                            <div><label>Диагноз:</label> <span>${visit.diagnosis}</span></div>
+                            <div><label>Лечение:</label> <span>${visit.treatment}</span></div>
+                            <div><label>Комментарии Доктора:</label> <span>${visit.doctorComments}</span></div>
+                        </div>
+                        <button class="delete-button" data-visit-id="${visit.id}"><i class="fas fa-trash"></i></button>
+                    `;
+
+                    // Добавление обработчиков для кнопок
+                    visitCard.querySelector('.delete-button').addEventListener('click', () => openDeleteConfirmation(visit.id));
+                    visitCard.querySelector('.edit-button').addEventListener('click', () => {
+                        console.log(`Редактировать визит: ${visit.id}`);
+                    });
+
+                    visitsCards.appendChild(visitCard);
+                });
+            })
+            .catch(error => console.error('Ошибка загрузки визитов:', error));
+    }
+
+    // Загрузка визитов при загрузке страницы
+    fetchVisits();
 });
-
-function deletePetOwner(inn) {
-    fetch(`/api/petOwner/${inn}`, {
-        method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Pet Owner deleted successfully');
-        location.reload();
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-function deletePet(id) {
-    fetch(`/api/pet/${id}`, {
-        method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Pet deleted successfully');
-        location.reload();
-    })
-    .catch(error => console.error('Error:', error));
-}

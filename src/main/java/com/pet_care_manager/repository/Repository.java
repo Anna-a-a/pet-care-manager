@@ -2,6 +2,8 @@ package com.pet_care_manager.repository;
 
 import com.pet_care_manager.model.Pet;
 import com.pet_care_manager.model.PetOwner;
+import com.pet_care_manager.model.Veterinarian;
+import com.pet_care_manager.model.Visit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -14,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 
 @org.springframework.stereotype.Repository
@@ -132,6 +135,119 @@ public class Repository {
             pet.setOwnerId(rs.getLong("owner_id"));
             pet.setPassportNumber(rs.getString("passport_number"));
             return pet;
+        }
+    }
+
+    public List<Visit> getAllVisits() {
+        String sql = "SELECT * FROM visit";
+        return jdbcTemplate.query(sql, new VisitRowMapper());
+    }
+
+    public Visit getVisitById(Long id) {
+        String sql = "SELECT * FROM visit WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new VisitRowMapper(), id);
+    }
+
+    public Visit createVisit(Visit visit) {
+        String sql = "INSERT INTO visit (pet_id, veterinarian_id, visit_date, diagnosis, treatment, doctor_comments) VALUES (?, ?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setLong(1, visit.getPetId());
+            ps.setLong(2, visit.getVeterinarianId());
+            ps.setDate(3, new java.sql.Date(visit.getVisitDate().getTime()));
+            ps.setString(4, visit.getDiagnosis());
+            ps.setString(5, visit.getTreatment());
+            ps.setString(6, visit.getDoctorComments());
+            return ps;
+        }, keyHolder);
+
+        visit.setId(((Number) keyHolder.getKeys().get("id")).longValue());
+        return visit;
+    }
+
+    public void updateVisit(Visit visit) {
+        String sql = "UPDATE visit SET pet_id = ?, veterinarian_id = ?, visit_date = ?, diagnosis = ?, treatment = ?, doctor_comments = ? WHERE id = ?";
+        jdbcTemplate.update(sql, visit.getPetId(), visit.getVeterinarianId(), new java.sql.Date(visit.getVisitDate().getTime()), visit.getDiagnosis(), visit.getTreatment(), visit.getDoctorComments(), visit.getId());
+    }
+
+    public void deleteVisit(Long id) {
+        // Обновление внешних ключей на null, если есть
+        String updateSql = "UPDATE visit SET pet_id = NULL, veterinarian_id = NULL WHERE id = ?";
+        jdbcTemplate.update(updateSql, id);
+
+        // Удаление записи
+        String deleteSql = "DELETE FROM visit WHERE id = ?";
+        jdbcTemplate.update(deleteSql, id);
+    }
+
+    private static class VisitRowMapper implements RowMapper<Visit> {
+        @Override
+        public Visit mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Visit visit = new Visit();
+            visit.setId(rs.getLong("id"));
+            visit.setPetId(rs.getLong("pet_id"));
+            visit.setVeterinarianId(rs.getLong("veterinarian_id"));
+            visit.setVisitDate(rs.getDate("visit_date"));
+            visit.setDiagnosis(rs.getString("diagnosis"));
+            visit.setTreatment(rs.getString("treatment"));
+            visit.setDoctorComments(rs.getString("doctor_comments"));
+            return visit;
+        }
+    }
+
+    public List<Veterinarian> getAllVeterinarians() {
+        String sql = "SELECT * FROM veterinarian";
+        return jdbcTemplate.query(sql, new VeterinarianRowMapper());
+    }
+
+    public Veterinarian getVeterinarianById(Long id) {
+        String sql = "SELECT * FROM veterinarian WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new VeterinarianRowMapper(), id);
+    }
+
+    public Veterinarian createVeterinarian(Veterinarian veterinarian) {
+        String sql = "INSERT INTO veterinarian (last_name, first_name, middle_name, specialization) VALUES (?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, veterinarian.getLastName());
+            ps.setString(2, veterinarian.getFirstName());
+            ps.setString(3, veterinarian.getMiddleName());
+            ps.setString(4, veterinarian.getSpecialization());
+            return ps;
+        }, keyHolder);
+
+        veterinarian.setId(((Number) keyHolder.getKeys().get("id")).longValue());
+        return veterinarian;
+    }
+
+    public void updateVeterinarian(Veterinarian veterinarian) {
+        String sql = "UPDATE veterinarian SET last_name = ?, first_name = ?, middle_name = ?, specialization = ? WHERE id = ?";
+        jdbcTemplate.update(sql, veterinarian.getLastName(), veterinarian.getFirstName(), veterinarian.getMiddleName(), veterinarian.getSpecialization(), veterinarian.getId());
+    }
+    public void deleteVeterinarian(Long id) {
+        // Обновление внешних ключей на null, если есть
+        String updateSql = "UPDATE visit SET veterinarian_id = NULL WHERE veterinarian_id = ?";
+        jdbcTemplate.update(updateSql, id);
+
+        // Удаление записи
+        String deleteSql = "DELETE FROM veterinarian WHERE id = ?";
+        jdbcTemplate.update(deleteSql, id);
+    }
+
+    private static class VeterinarianRowMapper implements RowMapper<Veterinarian> {
+        @Override
+        public Veterinarian mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Veterinarian veterinarian = new Veterinarian();
+            veterinarian.setId(rs.getLong("id"));
+            veterinarian.setLastName(rs.getString("last_name"));
+            veterinarian.setFirstName(rs.getString("first_name"));
+            veterinarian.setMiddleName(rs.getString("middle_name"));
+            veterinarian.setSpecialization(rs.getString("specialization"));
+            return veterinarian;
         }
     }
 }

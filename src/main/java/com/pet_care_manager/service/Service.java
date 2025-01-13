@@ -2,8 +2,12 @@ package com.pet_care_manager.service;
 
 import com.pet_care_manager.model.Pet;
 import com.pet_care_manager.model.PetOwner;
+import com.pet_care_manager.model.Veterinarian;
+import com.pet_care_manager.model.Visit;
 import com.pet_care_manager.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @org.springframework.stereotype.Service
 public class Service {
@@ -37,5 +41,45 @@ public class Service {
 
     public void deletePetById(Long id) {
         repository.deletePetById(id);
+    }
+
+    public List<Visit> getAllVisits() {
+        return repository.getAllVisits();
+    }
+
+    public Visit getVisitById(Long id) {
+        return repository.getVisitById(id);
+    }
+
+    public Visit createVisit(Visit visit) {
+        return repository.createVisit(visit);
+    }
+
+    public void updateVisit(Visit visit) {
+        repository.updateVisit(visit);
+    }
+
+    public void deleteVisit(Long id) {
+        repository.deleteVisit(id);
+    }
+
+    public List<Veterinarian> getAllVeterinarians() {
+        return repository.getAllVeterinarians();
+    }
+
+    public Veterinarian getVeterinarianById(Long id) {
+        return repository.getVeterinarianById(id);
+    }
+
+    public Veterinarian createVeterinarian(Veterinarian veterinarian) {
+        return repository.createVeterinarian(veterinarian);
+    }
+
+    public void updateVeterinarian(Veterinarian veterinarian) {
+        repository.updateVeterinarian(veterinarian);
+    }
+
+    public void deleteVeterinarian(Long id) {
+        repository.deleteVeterinarian(id);
     }
 }

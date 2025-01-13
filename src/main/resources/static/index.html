@@ -35,23 +35,21 @@
       <div class="search-bar">
         <input type="text" id="search" placeholder="Поиск...">
       </div>
-      <section id="pet-owners">
-        <h2><i class="fas fa-user"></i> Владельцы Животных</h2>
-        <div id="pet-owners-list"></div>
-      </section>
-      <section id="pets">
-        <h2><i class="fas fa-paw"></i> Животные</h2>
-        <div id="pets-list"></div>
-      </section>
-      <section id="veterinarians">
-        <h2><i class="fas fa-user-md"></i> Ветеринары</h2>
-        <div id="veterinarians-list"></div>
-      </section>
       <section id="visits">
-        <h2><i class="fas fa-calendar-alt"></i> Визиты</h2>
-        <div id="visits-list"></div>
+        <h2><i class="fas fa-calendar-alt"></i> Последние Визиты</h2>
+        <div id="visits-cards" class="cards-container"></div>
       </section>
     </main>
+  </div>
+</div>
+
+<!-- Модальное окно для подтверждения удаления -->
+<div id="deleteConfirmationModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close-modal">&times;</span>
+    <p>Вы уверены, что хотите удалить этот визит?</p>
+    <button id="confirmDelete">Да</button>
+    <button id="cancelDelete">Нет</button>
   </div>
 </div>
 
