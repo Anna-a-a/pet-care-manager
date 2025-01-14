@@ -26,6 +26,12 @@ public class Controller {
     public ResponseEntity<PetOwner> getPetOwnerById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getPetOwner(id));
     }
+    @GetMapping("/petOwners")
+    public ResponseEntity<List<PetOwner>> getAllPetOwners() {
+        List<PetOwner> petOwners = service.getAllPetOwners();
+        return ResponseEntity.ok(petOwners);
+    }
+
 
     @PostMapping("/petOwner")
     public ResponseEntity<PetOwner> createPetOwner(@RequestBody PetOwner petOwner) {

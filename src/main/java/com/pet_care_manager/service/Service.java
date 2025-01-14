@@ -18,6 +18,10 @@ public class Service {
     public PetOwner getPetOwner(Long id) {
         return repository.getPetOwner(id).orElseThrow(() -> new RuntimeException("PetOwner not found"));
     }
+    
+    public List<PetOwner> getAllPetOwners() {
+        return repository.getAllPetOwners();
+    }
 
     public PetOwner createPetOwner(PetOwner petOwner) {
         return repository.createPetOwner(petOwner);

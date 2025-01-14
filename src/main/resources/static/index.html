@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Админ Ветеринарной Клиники</title>
+  <title>VetCare Admin</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -17,10 +17,10 @@
     </div>
     <nav>
       <ul>
-        <li><a href="#pet-owners"><i class="fas fa-user"></i> Владельцы Животных</a></li>
+        <li><a href="index.html" class="toggle-sidebar"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
+        <li><a href="index.html" id="petOwnersButton"><i class="fas fa-user"></i> Владельцы Животных</a></li>
         <li><a href="#pets"><i class="fas fa-paw"></i> Животные</a></li>
         <li><a href="#veterinarians"><i class="fas fa-user-md"></i> Ветеринары</a></li>
-        <li><a href="#visits"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
       </ul>
     </nav>
   </aside>
@@ -28,7 +28,7 @@
   <div class="main-content">
     <header>
       <button id="toggle-sidebar" class="toggle-button"><i class="fas fa-bars"></i></button>
-      <h1>Админ Ветеринарной Клиники</h1>
+      <h1>VetCare Admin</h1>
     </header>
 
     <main>
@@ -37,7 +37,13 @@
       </div>
       <section id="visits">
         <h2><i class="fas fa-calendar-alt"></i> Последние Визиты</h2>
+        <button id="addVisitButton" class="add-button">+</button>
         <div id="visits-cards" class="cards-container"></div>
+      </section>
+      <section id="pet-owners" style="display: none;">
+        <h2><i class="fas fa-user"></i> Владельцы Животных</h2>
+        <button id="addOwnerButton" class="add-button">+</button>
+        <ul id="owners-list"></ul> <!-- Список владельцев -->
       </section>
     </main>
   </div>
@@ -50,6 +56,69 @@
     <p>Вы уверены, что хотите удалить этот визит?</p>
     <button id="confirmDelete">Да</button>
     <button id="cancelDelete">Нет</button>
+  </div>
+</div>
+
+<!-- Модальное окно для редактирования визита -->
+<div id="editVisitModal" class="modal">
+  <form id="editVisitForm">
+    <div>
+      <label for="editPetId">ID Животного:</label>
+      <input type="text" id="editPetId" name="petId" required>
+    </div>
+    <div>
+      <label for="editVeterinarianId">ID Ветеринара:</label>
+      <input type="text" id="editVeterinarianId" name="veterinarianId" required>
+    </div>
+    <div>
+      <label for="editVisitDate">Дата визита:</label>
+      <input type="date" id="editVisitDate" name="visitDate" required>
+    </div>
+    <div>
+      <label for="editDiagnosis">Диагноз:</label>
+      <input type="text" id="editDiagnosis" name="diagnosis" required>
+    </div>
+    <div>
+      <label for="editTreatment">Лечение:</label>
+      <input type="text" id="editTreatment" name="treatment" required>
+    </div>
+    <div>
+      <label for="editDoctorComments">Комментарии Доктора:</label>
+      <textarea id="editDoctorComments" name="doctorComments" required></textarea>
+    </div>
+    <div>
+      <button type="submit">Сохранить</button>
+      <button type="button" id="cancelEditButton">Отмена</button>
+    </div>
+  </form>
+</div>
+
+<!-- Модальное окно для добавления визита -->
+<div id="addVisitModal" class="modal">
+  <div class="modal-content">
+    <span id="closeAddVisitModal" class="close">&times;</span>
+    <h2>Добавить визит</h2>
+    <form id="addVisitForm">
+      <label for="addPetId">ID Животного:</label>
+      <input type="number" id="addPetId" name="petId" required>
+
+      <label for="addVeterinarianId">ID Ветеринара:</label>
+      <input type="number" id="addVeterinarianId" name="veterinarianId" required>
+
+      <label for="addVisitDate">Дата визита:</label>
+      <input type="date" id="addVisitDate" name="visitDate" required>
+
+      <label for="addDiagnosis">Диагноз:</label>
+      <input type="text" id="addDiagnosis" name="diagnosis" required>
+
+      <label for="addTreatment">Лечение:</label>
+      <input type="text" id="addTreatment" name="treatment" required>
+
+      <label for="addDoctorComments">Комментарии Доктора:</label>
+      <textarea id="addDoctorComments" name="doctorComments"></textarea>
+
+      <button type="submit">Добавить визит</button>
+    </form>
   </div>
 </div>
 

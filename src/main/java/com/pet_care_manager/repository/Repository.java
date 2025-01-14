@@ -50,6 +50,12 @@ public class Repository {
         String sql = "SELECT * FROM pet WHERE id = ?";
         return jdbcTemplate.query(sql, new PetRowMapper(), id).stream().findFirst();
     }
+
+    public List<PetOwner> getAllPetOwners() {
+        String sql = "SELECT * FROM pet_owner";
+        return jdbcTemplate.query(sql, new PetOwnerRowMapper());
+    }
+
     public PetOwner createPetOwner(PetOwner petOwner) {
         String sql = "INSERT INTO pet_owner (last_name, first_name, middle_name, inn) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
