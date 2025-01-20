@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetCare Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="wrapper">
+    <!-- Боковое меню -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Меню</h2>
+            <button id="close-sidebar" class="close-sidebar-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../index.html" class="toggle-sidebar"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
+                <li><a href="pet_owners.html"><i class="fas fa-user"></i> Владельцы Животных</a></li>
+                <li><a href="../pets.html"><i class="fas fa-paw"></i> Животные</a></li>
+                <li><a href="veterinarians.html" id="veterinariansButton"><i class="fas fa-user-md"></i> Ветеринары</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-content">
+        <header>
+            <button id="toggle-sidebar" class="toggle-button"><i class="fas fa-bars"></i></button>
+            <h1>VetCare Admin</h1>
+        </header>
+
+        <main>
+            <div class="search-bar">
+                <input type="text" id="searchVeterinarians" placeholder="Поиск ветеринаров...">
+                <button id="addVeterinarianButton" class="add-button">+</button>
+            </div>
+            <section id="veterinarians">
+                <h2><i class="fas fa-user-md"></i> Ветеринары</h2>
+                <div id="veterinariansCards" class="cards-container"></div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- Модальное окно для подтверждения удаления -->
+<div id="deleteConfirmationModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close-modal">&times;</span>
+        <p>Вы уверены, что хотите удалить этого ветеринара?</p>
+        <button id="confirmDelete">Да</button>
+        <button id="cancelDelete">Нет</button>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования ветеринара -->
+<div id="editVeterinarianModal" class="modal">
+    <div class="modal-content">
+        <form id="editVeterinarianForm">
+            <div>
+                <label for="editLastName">Фамилия:</label>
+                <input type="text" id="editLastName" name="lastName" required>
+            </div>
+            <div>
+                <label for="editFirstName">Имя:</label>
+                <input type="text" id="editFirstName" name="firstName" required>
+            </div>
+            <div>
+                <label for="editMiddleName">Отчество:</label>
+                <input type="text" id="editMiddleName" name="middleName" required>
+            </div>
+            <div>
+                <label for="editSpecialization">Специализация:</label>
+                <input type="text" id="editSpecialization" name="specialization" required>
+            </div>
+            <div>
+                <button type="submit">Сохранить</button>
+                <button type="button" id="cancelEditButton">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления нового ветеринара -->
+<div id="addVeterinarianModal" class="modal">
+    <div class="modal-content">
+        <h2>Добавить ветеринара</h2>
+        <form id="addVeterinarianForm">
+            <div>
+                <label for="addLastName">Фамилия:</label>
+                <input type="text" id="addLastName" name="lastName" required>
+            </div>
+            <div>
+                <label for="addFirstName">Имя:</label>
+                <input type="text" id="addFirstName" name="firstName" required>
+            </div>
+            <div>
+                <label for="addMiddleName">Отчество:</label>
+                <input type="text" id="addMiddleName" name="middleName" required>
+            </div>
+            <div>
+                <label for="addSpecialization">Специализация:</label>
+                <input type="text" id="addSpecialization" name="specialization" required>
+            </div>
+            <div>
+                <button type="submit">Добавить</button>
+                <button type="button" id="closeAddVeterinarianModal">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="js/veterinarians.js"></script>
+</body>
+</html>
