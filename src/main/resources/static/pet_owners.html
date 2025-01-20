@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VetCare Admin - Владельцы Животных</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -17,9 +17,9 @@
     </div>
     <nav>
       <ul>
-        <li><a href="index.html" class="toggle-sidebar"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
+        <li><a href="../index.html" class="toggle-sidebar"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
         <li><a href="pet_owners.html" id="petOwnersButton"><i class="fas fa-user"></i> Владельцы Животных</a></li>
-        <li><a href="#pets"><i class="fas fa-paw"></i> Животные</a></li>
+        <li><a href="pets.html"><i class="fas fa-paw"></i> Животные</a></li>
         <li><a href="#veterinarians"><i class="fas fa-user-md"></i> Ветеринары</a></li>
       </ul>
     </nav>
@@ -34,12 +34,80 @@
     <main>
       <div class="search-bar">
         <input type="text" id="searchPetOwners" placeholder="Поиск владельцев...">
+        <button id="addOwnerButton" class="add-button">+</button>
       </div>
       <section id="pet-owners">
         <h2><i class="fas fa-user"></i> Владельцы Животных</h2>
         <div id="petOwnersCards" class="cards-container"></div>
       </section>
     </main>
+  </div>
+</div>
+
+<!-- Модальное окно для подтверждения удаления -->
+<div id="deleteConfirmationModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close-modal">&times;</span>
+    <p>Вы уверены, что хотите удалить этого владельца?</p>
+    <button id="confirmDelete">Да</button>
+    <button id="cancelDelete">Нет</button>
+  </div>
+</div>
+
+<!-- Модальное окно для редактирования владельца -->
+<div id="editOwnerModal" class="modal">
+  <div class="modal-content">
+    <form id="editOwnerForm">
+      <div>
+        <label for="editLastName">Фамилия:</label>
+        <input type="text" id="editLastName" name="lastName" required>
+      </div>
+      <div>
+        <label for="editFirstName">Имя:</label>
+        <input type="text" id="editFirstName" name="firstName" required>
+      </div>
+      <div>
+        <label for="editMiddleName">Отчество:</label>
+        <input type="text" id="editMiddleName" name="middleName" required>
+      </div>
+      <div>
+        <label for="editInn">ИНН:</label>
+        <input type="text" id="editInn" name="inn" required>
+      </div>
+      <div>
+        <button type="submit">Сохранить</button>
+        <button type="button" id="cancelEditButton">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно для добавления нового владельца -->
+<div id="addOwnerModal" class="modal">
+  <div class="modal-content">
+    <h2>Добавить владельца</h2>
+    <form id="addOwnerForm">
+      <div>
+        <label for="addLastName">Фамилия:</label>
+        <input type="text" id="addLastName" name="lastName" required>
+      </div>
+      <div>
+        <label for="addFirstName">Имя:</label>
+        <input type="text" id="addFirstName" name="firstName" required>
+      </div>
+      <div>
+        <label for="addMiddleName">Отчество:</label>
+        <input type="text" id="addMiddleName" name="middleName" required>
+      </div>
+      <div>
+        <label for="addInn">ИНН:</label>
+        <input type="text" id="addInn" name="inn" required>
+      </div>
+      <div>
+        <button type="submit">Добавить</button>
+        <button type="button" id="closeAddOwnerModal">Отмена</button>
+      </div>
+    </form>
   </div>
 </div>
 

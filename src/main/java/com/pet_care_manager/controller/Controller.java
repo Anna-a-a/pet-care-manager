@@ -41,10 +41,17 @@ public class Controller {
         return ResponseEntity.ok(createdPetOwner);
     }
 
-    @PutMapping("/updatePetOwner")
-    public ResponseEntity<String> updatePetOwnerByInn(@RequestBody PetOwner petOwner) {
-        service.updatePetOwnerByInn(petOwner);
-        return ResponseEntity.ok("PetOwner updated successfully");
+
+    @PutMapping("/updatePetOwner/{id}")
+    public ResponseEntity<Void> updatePetOwner(@PathVariable Long id, @RequestBody PetOwner petOwner) {
+        service.updatePetOwner(id, petOwner);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/deletePetOwner/{inn}")
+    public ResponseEntity<Void> deletePetOwnerByInn(@PathVariable Long inn) {
+        service.deletePetOwnerByInn(inn);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/pet/{id}")

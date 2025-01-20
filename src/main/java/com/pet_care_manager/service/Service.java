@@ -27,8 +27,12 @@ public class Service {
         return repository.createPetOwner(petOwner);
     }
 
-    public void updatePetOwnerByInn(PetOwner petOwner) {
-        repository.updatePetOwnerByInn(petOwner);
+    public void updatePetOwner(Long id, PetOwner petOwner) {
+        repository.updatePetOwner(id, petOwner);
+    }
+
+    public void deletePetOwnerByInn(Long inn) {
+        repository.deletePetOwnerByInn(inn);
     }
 
     public Pet getPet(Long id) {

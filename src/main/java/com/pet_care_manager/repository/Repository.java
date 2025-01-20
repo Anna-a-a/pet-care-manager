@@ -51,6 +51,22 @@ public class Repository {
         return jdbcTemplate.query(sql, new PetRowMapper(), id).stream().findFirst();
     }
 
+    public void updatePetOwner(Long id, PetOwner petOwner) {
+        String sql = "UPDATE pet_owner SET last_name = ?, first_name = ?, middle_name = ?, inn = ? WHERE id = ?";
+        jdbcTemplate.update(sql, petOwner.getLastName(), petOwner.getFirstName(), petOwner.getMiddleName(), petOwner.getInn(), id);
+    }
+
+    public void deletePetOwnerByInn(Long inn) {
+        // Обновление внешних ключей на null, если есть
+        String updateSql = "UPDATE pet SET owner_id = NULL WHERE owner_id = (SELECT id FROM pet_owner WHERE inn = ?)";
+        jdbcTemplate.update(updateSql, inn);
+
+        // Удаление записи
+        String deleteSql = "DELETE FROM pet_owner WHERE inn = ?";
+        jdbcTemplate.update(deleteSql, inn);
+    }
+
+
     public List<PetOwner> getAllPetOwners() {
         String sql = "SELECT * FROM pet_owner";
         return jdbcTemplate.query(sql, new PetOwnerRowMapper());
@@ -77,15 +93,6 @@ public class Repository {
         return petOwner;
     }
 
-    public void updatePetOwnerByInn(PetOwner petOwner) {
-        String sql = "UPDATE pet_owner SET first_name = ?, last_name = ?, middle_name = ? WHERE inn = ?";
-
-        jdbcTemplate.update(sql,
-                petOwner.getFirstName(),
-                petOwner.getLastName(),
-                petOwner.getMiddleName(),
-                petOwner.getInn());
-    }
 
     public Pet createPet(Pet pet) {
         String sql = "INSERT INTO pet (nickname, breed, pet_species, owner_id, passport_number) VALUES (?, ?, ?, ?, ?)";
