@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetCare Admin</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="wrapper">
+  <!-- Боковое меню -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h2>Меню</h2>
+      <button id="close-sidebar" class="close-sidebar-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="../index.html" class="toggle-sidebar"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
+        <li><a href="pet_owners.html"><i class="fas fa-user"></i> Владельцы Животных</a></li>
+        <li><a href="pets.html" id="petsButton"><i class="fas fa-paw"></i> Животные</a></li>
+        <li><a href="#veterinarians"><i class="fas fa-user-md"></i> Ветеринары</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <button id="toggle-sidebar" class="toggle-button"><i class="fas fa-bars"></i></button>
+      <h1>VetCare Admin</h1>
+    </header>
+
+    <main>
+      <div class="search-bar">
+        <input type="text" id="searchPets" placeholder="Поиск животных...">
+        <button id="addPetButton" class="add-button">+</button>
+      </div>
+      <section id="pets">
+        <h2><i class="fas fa-paw"></i> Животные</h2>
+        <div id="petsCards" class="cards-container"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Модальное окно для подтверждения удаления -->
+<div id="deletePetConfirmationModal" class="modal">
+  <div class="modal-content">
+    <span id="closePetModal" class="close-modal">&times;</span>
+    <p>Вы уверены, что хотите удалить это животное?</p>
+    <button id="confirmPetDelete">Да</button>
+    <button id="cancelPetDelete">Нет</button>
+  </div>
+</div>
+
+<!-- Модальное окно для редактирования животного -->
+<div id="editPetModal" class="modal">
+  <div class="modal-content">
+    <form id="editPetForm">
+      <div>
+        <label for="editNickname">Кличка:</label>
+        <input type="text" id="editNickname" name="nickname" required>
+      </div>
+      <div>
+        <label for="editBreed">Порода:</label>
+        <input type="text" id="editBreed" name="breed" required>
+      </div>
+      <div>
+        <label for="editPetSpecies">Вид животного:</label>
+        <input type="text" id="editPetSpecies" name="petSpecies" required>
+      </div>
+      <div>
+        <label for="editPassportNumber">Номер паспорта:</label>
+        <input type="text" id="editPassportNumber" name="passportNumber" required>
+      </div>
+      <div>
+        <label for="editOwnerInn">ИНН владельца:</label>
+        <input type="text" id="editOwnerInn" name="ownerInn" required>
+      </div>
+      <div>
+        <button type="submit">Сохранить</button>
+        <button type="button" id="cancelEditPetButton">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно для добавления нового животного -->
+<div id="addPetModal" class="modal">
+  <div class="modal-content">
+    <h2>Добавить животное</h2>
+    <form id="addPetForm">
+      <div>
+        <label for="addNickname">Кличка:</label>
+        <input type="text" id="addNickname" name="nickname" required>
+      </div>
+      <div>
+        <label for="addBreed">Порода:</label>
+        <input type="text" id="addBreed" name="breed" required>
+      </div>
+      <div>
+        <label for="addPetSpecies">Вид животного:</label>
+        <input type="text" id="addPetSpecies" name="petSpecies" required>
+      </div>
+      <div>
+        <label for="addPassportNumber">Номер паспорта:</label>
+        <input type="text" id="addPassportNumber" name="passportNumber" required>
+      </div>
+      <div>
+        <label for="addOwnerInn">ИНН владельца:</label>
+        <input type="text" id="addOwnerInn" name="ownerInn" required>
+      </div>
+      <div>
+        <button type="submit">Добавить</button>
+        <button type="button" id="closeAddPetModal">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/pets.js"></script>
+</body>
+</html>

@@ -428,10 +428,16 @@ form button:hover {
 .modal-content #confirmDelete {
     background-color: #ff6347;
 }
-
-.modal-content #confirmDelete:hover {
-    background-color: #ff4500;
+.modal-content #confirmPetDelete {
+    background-color: #ff6347;
 }
+
+.modal-content #confirmPetDelete:hover {
+    background-color: #ff4500;
+
+}.modal-content #confirmPetDelete:hover {
+     background-color: #ff4500;
+ }
 /* Стили для контейнера владельцев животных */
 .pet-owners-container {
     display: none; /* Скрыто по умолчанию */
@@ -532,3 +538,4 @@ form button:hover {
 .owner-card .delete-button:hover {
     background-color: #ff4500;
 }
+

@@ -35,6 +35,10 @@ public class Service {
         repository.deletePetOwnerByInn(inn);
     }
 
+    public List<Pet> getAllPets() {
+        return repository.getAllPets();
+    }
+
     public Pet getPet(Long id) {
         return repository.getPet(id).orElse(null);
     }

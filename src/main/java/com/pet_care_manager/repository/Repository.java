@@ -94,47 +94,10 @@ public class Repository {
     }
 
 
-    public Pet createPet(Pet pet) {
-        String sql = "INSERT INTO pet (nickname, breed, pet_species, owner_id, passport_number) VALUES (?, ?, ?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, pet.getNickname());
-            ps.setString(2, pet.getBreed());
-            ps.setString(3, pet.getPetSpecies());
-            ps.setLong(4, pet.getOwnerId());
-            ps.setString(5, pet.getPassportNumber());
-            return ps;
-        }, keyHolder);
-
-        pet.setId(
-                (
-                        (Integer)keyHolder.getKeys().get("id")
-                ).longValue()
-        );
-        return pet;
-    }
-
-    public void updatePet(Pet pet) {
-        String sql = "UPDATE pet SET nickname = ?, breed = ?, pet_species = ?, owner_id = ? WHERE passport_number = ?";
-
-        jdbcTemplate.update(sql,
-                pet.getNickname(),
-                pet.getBreed(),
-                pet.getPetSpecies(),
-                pet.getOwnerId(),
-                pet.getPassportNumber());
-    }
-
-    public void deletePetById(Long id) {
-        // Обновление записей в таблице visit, чтобы удалить ссылку на удаляемую запись в таблице pets
-        String updateVisitsSql = "UPDATE visit SET pet_id = NULL WHERE pet_id = ?";
-        jdbcTemplate.update(updateVisitsSql, id);
-
-        // Удаление записи в таблице pets
-        String deletePetSql = "DELETE FROM pet WHERE id = ?";
-        jdbcTemplate.update(deletePetSql, id);
+    public List<Pet> getAllPets() {
+        String sql = "SELECT p.*, po.inn AS ownerInn FROM pet p JOIN pet_owner po ON p.owner_id = po.id";
+        return jdbcTemplate.query(sql, new PetRowMapper());
     }
 
     private static class PetRowMapper implements RowMapper<Pet> {
@@ -147,9 +110,70 @@ public class Repository {
             pet.setPetSpecies(rs.getString("pet_species"));
             pet.setOwnerId(rs.getLong("owner_id"));
             pet.setPassportNumber(rs.getString("passport_number"));
+            pet.setOwnerInn(rs.getLong("ownerInn")); // Добавляем ИНН владельца
             return pet;
         }
     }
+
+
+    public Pet createPet(Pet pet) {
+        // Поиск ownerId по ownerInn
+        Long ownerId = findOwnerIdByInn(pet.getOwnerInn());
+        if (ownerId == null) {
+            throw new IllegalArgumentException("Owner with INN " + pet.getOwnerInn() + " not found");
+        }
+        pet.setOwnerId(ownerId);
+
+        String sql = "INSERT INTO pet (nickname, breed, pet_species, owner_id, passport_number) VALUES (?, ?, ?, ?, ?)";
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, pet.getNickname());
+            ps.setString(2, pet.getBreed());
+            ps.setString(3, pet.getPetSpecies());
+            ps.setLong(4, pet.getOwnerId());
+            ps.setString(5, pet.getPassportNumber());
+            return ps;
+        });
+
+
+        return pet;
+    }
+
+    private Long findOwnerIdByInn(Long inn) {
+        String sql = "SELECT id FROM pet_owner WHERE inn = ?";
+        List<Long> ownerIds = jdbcTemplate.query(sql, new RowMapper<Long>() {
+            @Override
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("id");
+            }
+        }, inn);
+        return ownerIds.isEmpty() ? null : ownerIds.get(0);
+    }
+
+
+    public void updatePet(Pet pet) {
+        String sql = "UPDATE pet SET nickname = ?, breed = ?, pet_species = ? WHERE passport_number = ?";
+        jdbcTemplate.update(sql,
+                pet.getNickname(),
+                pet.getBreed(),
+                pet.getPetSpecies(),
+                pet.getPassportNumber());
+    }
+
+
+
+    public void deletePetById(Long id) {
+        // Обновление записей в таблице visit, чтобы удалить ссылку на удаляемую запись в таблице pets
+        String updateVisitsSql = "UPDATE visit SET pet_id = NULL WHERE pet_id = ?";
+        jdbcTemplate.update(updateVisitsSql, id);
+
+        // Удаление записи в таблице pets
+        String deletePetSql = "DELETE FROM pet WHERE id = ?";
+        jdbcTemplate.update(deletePetSql, id);
+    }
+
+
 
     public Visit getVisitById(Long id) {
         String sql = "SELECT * FROM visit WHERE id = ?";

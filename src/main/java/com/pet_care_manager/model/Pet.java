@@ -8,6 +8,8 @@ public class Pet {
     private String petSpecies;
     private Long ownerId;
     private String passportNumber;
+    private Long ownerInn; // Добавляем ИНН владельца
+
 
     public Pet() {
     }
@@ -19,6 +21,14 @@ public class Pet {
         this.petSpecies = petSpecies;
         this.ownerId = ownerId;
         this.passportNumber = passportNumber;
+    }
+
+    public Long getOwnerInn() {
+        return ownerInn;
+    }
+
+    public void setOwnerInn(Long ownerInn) {
+        this.ownerInn = ownerInn;
     }
 
     public Long getId() {
