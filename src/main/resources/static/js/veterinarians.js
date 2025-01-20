@@ -35,9 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     const veterinarianCard = document.createElement('div');
                     veterinarianCard.className = 'owner-card';
                     veterinarianCard.innerHTML = `
-                        <h3>${veterinarian.lastName} ${veterinarian.firstName}</h3>
+                        <h3>${veterinarian.lastName} ${veterinarian.firstName} </h3>
                         <h3>${veterinarian.middleName}</h3>
                         <div class="owner-info">
+                            <div><label>ID:</label> <span>${veterinarian.id}</span></div>
                             <div><label>Специализация:</label> <span>${veterinarian.specialization}</span></div>
                         </div>
                         <button class="edit-button"><i class="fas fa-edit"></i></button>

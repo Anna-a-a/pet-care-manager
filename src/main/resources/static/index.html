@@ -32,7 +32,6 @@
     </header>
 
     <main>
-
       <div class="search-bar">
         <input type="text" id="search" placeholder="Поиск...">
       </div>
@@ -63,37 +62,36 @@
 <!-- Модальное окно для редактирования визита -->
 <div id="editVisitModal" class="modal">
   <div class="modal-content">
-  <form id="editVisitForm">
-
-    <div>
-      <label for="editVeterinarianId">ID Ветеринара:</label>
-      <input type="text" id="editVeterinarianId" name="veterinarianId" required>
-    </div>
-    <div>
-      <label for="editVisitDate">Дата визита:</label>
-      <input type="date" id="editVisitDate" name="visitDate" required>
-    </div>
-    <div>
-      <label for="editDiagnosis">Диагноз:</label>
-      <input type="text" id="editDiagnosis" name="diagnosis" required>
-    </div>
-    <div>
-      <label for="editTreatment">Лечение:</label>
-      <input type="text" id="editTreatment" name="treatment" required>
-    </div>
-    <div>
-      <label for="editDoctorComments">Комментарии доктора:</label>
-      <textarea id="editDoctorComments" name="doctorComments" required></textarea>
-    </div>
-    <div>
-      <button type="submit">Сохранить</button>
-      <button type="button" id="cancelEditButton">Отмена</button>
-    </div>
-
-  </form>
+    <form id="editVisitForm">
+      <div>
+        <label for="editVeterinarianId">ID Ветеринара:</label>
+        <input type="text" id="editVeterinarianId" name="veterinarianId" required>
+      </div>
+      <div>
+        <label for="editVisitDate">Дата визита:</label>
+        <input type="date" id="editVisitDate" name="visitDate" required>
+      </div>
+      <div>
+        <label for="editDiagnosis">Диагноз:</label>
+        <input type="text" id="editDiagnosis" name="diagnosis" required>
+      </div>
+      <div>
+        <label for="editTreatment">Лечение:</label>
+        <input type="text" id="editTreatment" name="treatment" required>
+      </div>
+      <div>
+        <label for="editDoctorComments">Комментарии доктора:</label>
+        <textarea id="editDoctorComments" name="doctorComments" required></textarea>
+      </div>
+      <div>
+        <button type="submit">Сохранить</button>
+        <button type="button" id="cancelEditButton">Отмена</button>
+      </div>
+    </form>
   </div>
 </div>
 
+<!-- Модальное окно для добавления нового визита -->
 <div id="addVisitModal" class="modal">
   <div class="modal-content">
     <h2>Добавить визит</h2>

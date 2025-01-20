@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Проверка, что элементы существуют
     const editVisitModal = document.getElementById('editVisitModal');
     const cancelEditButton = document.getElementById('cancelEditButton');
     const editVisitForm = document.getElementById('editVisitForm');
@@ -17,12 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeAddVisitModal = document.getElementById('closeAddVisitModal');
     const addVisitForm = document.getElementById('addVisitForm');
 
-    // Open the modal when the "+" button is clicked
     addVisitButton.addEventListener('click', function() {
         addVisitModal.style.display = 'block';
     });
 
-    // Close the modal when the "X" button is clicked
     closeAddVisitModal.addEventListener('click', function() {
         addVisitModal.style.display = 'none';
     });
@@ -30,22 +27,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let visitIdToDelete = null;
     let currentVisit = null;
 
-    // Убедитесь, что sidebar открывается по умолчанию
-    sidebar.classList.add('open'); // По умолчанию sidebar открыт
-    mainContent.style.marginLeft = '250px'; // Смещаем контент, чтобы учесть ширину sidebar
+    sidebar.classList.add('open');
+    mainContent.style.marginLeft = '250px';
 
-    // Функция для открытия формы редактирования
     function openEditVisitForm(visit) {
         currentVisit = visit;
 
-        // Заполняем поля формы данными визита
         document.getElementById('editVeterinarianId').value = visit.veterinarianId || '';
         document.getElementById('editVisitDate').value = visit.visitDate ? new Date(visit.visitDate).toISOString().split('T')[0] : '';
         document.getElementById('editDiagnosis').value = visit.diagnosis || '';
         document.getElementById('editTreatment').value = visit.treatment || '';
         document.getElementById('editDoctorComments').value = visit.doctorComments || '';
 
-        // Открытие модального окна
         editVisitModal.style.display = 'block';
     }
 
@@ -53,11 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
         editVisitModal.style.display = 'none';
     });
 
-    // Открытие и закрытие бокового меню
     toggleSidebarButton.addEventListener('click', () => {
-        sidebar.classList.toggle('open'); // Переключение класса 'open' для панели
-        sidebar.classList.toggle('closed'); // Переключение класса 'closed' для скрытия панели
-        mainContent.style.marginLeft = sidebar.classList.contains('open') ? '250px' : '0'; // Смещение контента в зависимости от состояния панели
+        sidebar.classList.toggle('open');
+        sidebar.classList.toggle('closed');
+        mainContent.style.marginLeft = sidebar.classList.contains('open') ? '250px' : '0';
     });
 
     closeSidebarButton.addEventListener('click', () => {
@@ -66,29 +58,25 @@ document.addEventListener('DOMContentLoaded', function() {
         mainContent.style.marginLeft = '0';
     });
 
-    // Открытие модального окна подтверждения удаления
     function openDeleteConfirmation(visitId) {
         visitIdToDelete = visitId;
         deleteConfirmationModal.style.display = 'block';
     }
 
-    // Закрытие модального окна
     function closeDeleteModal() {
         deleteConfirmationModal.style.display = 'none';
     }
 
-    // Закрытие модального окна через кнопку
     closeModalButton.addEventListener('click', closeDeleteModal);
     cancelDeleteButton.addEventListener('click', closeDeleteModal);
 
-    // Удаление визита
     confirmDeleteButton.addEventListener('click', () => {
         if (visitIdToDelete !== null) {
             fetch(`/api/deleteVisit/${visitIdToDelete}`, { method: 'DELETE' })
                 .then(response => {
                     if (response.ok) {
                         closeDeleteModal();
-                        fetchVisits(); // Перезагрузка списка визитов
+                        fetchVisits();
                     } else {
                         alert('Ошибка при удалении визита');
                     }
@@ -97,12 +85,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Если требуется скрывать или показывать sidebar
     document.querySelector(".toggle-sidebar").addEventListener("click", function () {
-        window.location.href = "index.html"; // Переход на главную страницу
+        window.location.href = "index.html";
     });
 
-    // Получение списка визитов
     function fetchVisits() {
         fetch('/api/visits')
             .then(response => {
@@ -112,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                visitsCards.innerHTML = ''; // Очистка контейнера
+                visitsCards.innerHTML = '';
                 data.forEach(visit => {
                     const visitCard = document.createElement('div');
                     visitCard.className = 'visit-card';
@@ -122,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="visit-info">
                             <div><label>Паспорт животного:</label> <span>${visit.petPassport}</span></div>
                             <div><label>ID Ветеринара:</label> <span>${visit.veterinarianId}</span></div>
+                            <div><label>ФИО Ветеринара:</label> <span>${visit.veterinarianLastName} ${visit.veterinarianFirstName} ${visit.veterinarianMiddleName}</span></div>
                             <div><label>Диагноз:</label> <span>${visit.diagnosis}</span></div>
                             <div><label>Лечение:</label> <span>${visit.treatment}</span></div>
                             <div><label>Комментарии Доктора:</label> <span>${visit.doctorComments}</span></div>
@@ -129,11 +116,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <button class="delete-button" data-visit-id="${visit.id}"><i class="fas fa-trash"></i></button>
                     `;
 
-                    // Добавление обработчиков для кнопок
                     visitCard.querySelector('.delete-button').addEventListener('click', () => openDeleteConfirmation(visit.id));
-                    visitCard.querySelector('.edit-button').addEventListener('click', () => {
-                        openEditVisitForm(visit); // Вызов функции для открытия модального окна с визитом
-                    });
+                    visitCard.querySelector('.edit-button').addEventListener('click', () => openEditVisitForm(visit));
 
                     visitsCards.appendChild(visitCard);
                 });
@@ -141,20 +125,18 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Ошибка загрузки визитов:', error));
     }
 
-    // Отправка обновленных данных визита
     editVisitForm.addEventListener('submit', function(event) {
-        event.preventDefault();  // Отключаем стандартное поведение формы
+        event.preventDefault();
 
         const updatedVisit = {
-            id: currentVisit.id,  // Убедитесь, что отправляете ID визита
+            id: currentVisit.id,
             veterinarianId: document.getElementById('editVeterinarianId').value,
-            visitDate: document.getElementById('editVisitDate').value, // Дата визита
+            visitDate: document.getElementById('editVisitDate').value,
             diagnosis: document.getElementById('editDiagnosis').value,
             treatment: document.getElementById('editTreatment').value,
             doctorComments: document.getElementById('editDoctorComments').value
         };
 
-        // Отправляем обновленные данные визита на сервер через API
         fetch(`/api/updateVisit/${currentVisit.id}`, {
             method: 'PUT',
             headers: {
@@ -165,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => {
             if (response.ok) {
                 alert('Визит обновлен!');
-                fetchVisits();  // Обновляем список визитов
-                editVisitModal.style.display = 'none';  // Закрываем модальное окно
+                fetchVisits();
+                editVisitModal.style.display = 'none';
             } else {
                 return response.json().then(errorData => {
                     alert(`Ошибка при обновлении визита: ${errorData.message || 'Неизвестная ошибка'}`);
@@ -179,9 +161,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Submit the form to add a new visit
     addVisitForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from reloading the page
+        event.preventDefault();
 
         const addPetPassport = document.getElementById('addPetPassport');
         const addVeterinarianId = document.getElementById('addVeterinarianId');
@@ -200,7 +181,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 doctorComments: addDoctorComments.value
             };
 
-            // Send the data to the backend via POST request
             fetch('/api/visit', {
                 method: 'POST',
                 headers: {
@@ -211,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => {
                 if (response.ok) {
                     alert('Визит добавлен!');
-                    fetchVisits();  // Refresh the visits list
-                    addVisitModal.style.display = 'none';  // Close the modal
+                    fetchVisits();
+                    addVisitModal.style.display = 'none';
                 } else {
                     return response.json().then(errorData => {
                         alert(`Ошибка при добавлении визита: ${errorData.message || 'Неизвестная ошибка'}`);
@@ -228,13 +208,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Close the modal when clicking outside of it
     window.addEventListener('click', function(event) {
         if (event.target === addVisitModal) {
             addVisitModal.style.display = 'none';
         }
     });
 
-    // Загрузка визитов при загрузке страницы
     fetchVisits();
 });

@@ -68,7 +68,7 @@ public class Repository {
 
 
     public List<PetOwner> getAllPetOwners() {
-        String sql = "SELECT * FROM pet_owner";
+        String sql = "SELECT * FROM pet_owner ORDER BY id";
         return jdbcTemplate.query(sql, new PetOwnerRowMapper());
     }
 
@@ -96,7 +96,7 @@ public class Repository {
 
 
     public List<Pet> getAllPets() {
-        String sql = "SELECT p.*, po.inn AS ownerInn FROM pet p JOIN pet_owner po ON p.owner_id = po.id";
+        String sql = "SELECT p.*, po.inn AS ownerInn FROM pet p JOIN pet_owner po ON p.owner_id = po.id ORDER BY id";
         return jdbcTemplate.query(sql, new PetRowMapper());
     }
 
@@ -226,12 +226,14 @@ public class Repository {
     }
 
     public List<Visit> getAllVisits() {
-        String sql = "SELECT v.*, p.passport_number\n" +
+        String sql = "SELECT v.*, p.passport_number, vet.last_name AS vet_last_name, vet.first_name AS vet_first_name, vet.middle_name AS vet_middle_name\n" +
                 "FROM visit v\n" +
                 "JOIN pet p ON v.pet_id = p.id\n" +
-                "ORDER BY v.visit_date DESC;\n";
+                "JOIN veterinarian vet ON v.veterinarian_id = vet.id\n" +
+                "ORDER BY v.visit_date DESC;";
         return jdbcTemplate.query(sql, new VisitRowMapper());
     }
+
 
     private static class VisitRowMapper implements RowMapper<Visit> {
         @Override
@@ -245,13 +247,17 @@ public class Repository {
             visit.setDiagnosis(rs.getString("diagnosis"));
             visit.setTreatment(rs.getString("treatment"));
             visit.setDoctorComments(rs.getString("doctor_comments"));
+            visit.setVeterinarianLastName(rs.getString("vet_last_name"));
+            visit.setVeterinarianFirstName(rs.getString("vet_first_name"));
+            visit.setVeterinarianMiddleName(rs.getString("vet_middle_name"));
             return visit;
         }
     }
 
 
+
     public List<Veterinarian> getAllVeterinarians() {
-        String sql = "SELECT * FROM veterinarian";
+        String sql = "SELECT * FROM veterinarian ORDER BY id";
         return jdbcTemplate.query(sql, new VeterinarianRowMapper());
     }
 

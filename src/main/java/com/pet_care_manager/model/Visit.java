@@ -11,6 +11,9 @@ public class Visit {
     private String diagnosis;
     private String treatment;
     private String doctorComments;
+    private String veterinarianLastName;
+    private String veterinarianFirstName;
+    private String veterinarianMiddleName;
 
     // Getters and Setters
     public Long getId() {
@@ -75,5 +78,29 @@ public class Visit {
 
     public void setDoctorComments(String doctorComments) {
         this.doctorComments = doctorComments;
+    }
+
+    public String getVeterinarianLastName() {
+        return veterinarianLastName;
+    }
+
+    public void setVeterinarianLastName(String veterinarianLastName) {
+        this.veterinarianLastName = veterinarianLastName;
+    }
+
+    public String getVeterinarianFirstName() {
+        return veterinarianFirstName;
+    }
+
+    public void setVeterinarianFirstName(String veterinarianFirstName) {
+        this.veterinarianFirstName = veterinarianFirstName;
+    }
+
+    public String getVeterinarianMiddleName() {
+        return veterinarianMiddleName;
+    }
+
+    public void setVeterinarianMiddleName(String veterinarianMiddleName) {
+        this.veterinarianMiddleName = veterinarianMiddleName;
     }
 }
