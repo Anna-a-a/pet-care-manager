@@ -26,11 +26,13 @@ public class Controller {
     public ResponseEntity<PetOwner> getPetOwnerById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getPetOwner(id));
     }
+
     @GetMapping("/petOwners")
     public ResponseEntity<List<PetOwner>> getAllPetOwners() {
         List<PetOwner> petOwners = service.getAllPetOwners();
         return ResponseEntity.ok(petOwners);
     }
+
 
 
     @PostMapping("/petOwner")
@@ -73,6 +75,7 @@ public class Controller {
         return service.getAllVisits();
     }
 
+
     @GetMapping("/visit/{id}")
     public ResponseEntity<Visit> getVisitById(@PathVariable Long id) {
         Visit visit = service.getVisitById(id);
@@ -91,6 +94,8 @@ public class Controller {
         service.updateVisit(visit);
         return ResponseEntity.ok().build();
     }
+
+
 
     @DeleteMapping("deleteVisit/{id}")
     public ResponseEntity<Void> deleteVisit(@PathVariable Long id) {

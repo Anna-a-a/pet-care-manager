@@ -144,17 +144,21 @@ public class Repository {
         }
     }
 
-    public List<Visit> getAllVisits() {
-        String sql = "SELECT * FROM visit";
-        return jdbcTemplate.query(sql, new VisitRowMapper());
-    }
-
     public Visit getVisitById(Long id) {
         String sql = "SELECT * FROM visit WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new VisitRowMapper(), id);
     }
 
     public Visit createVisit(Visit visit) {
+        String petIdSql = "SELECT id FROM pet WHERE passport_number = ?";
+        Long petId = jdbcTemplate.queryForObject(petIdSql, Long.class, visit.getPetPassport());
+
+        if (petId == null) {
+            throw new RuntimeException("Pet not found with passport number: " + visit.getPetPassport());
+        }
+
+        visit.setPetId(petId);
+
         String sql = "INSERT INTO visit (pet_id, veterinarian_id, visit_date, diagnosis, treatment, doctor_comments) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -173,10 +177,12 @@ public class Repository {
         return visit;
     }
 
+
     public void updateVisit(Visit visit) {
-        String sql = "UPDATE visit SET pet_id = ?, veterinarian_id = ?, visit_date = ?, diagnosis = ?, treatment = ?, doctor_comments = ? WHERE id = ?";
-        jdbcTemplate.update(sql, visit.getPetId(), visit.getVeterinarianId(), new java.sql.Date(visit.getVisitDate().getTime()), visit.getDiagnosis(), visit.getTreatment(), visit.getDoctorComments(), visit.getId());
+        String sql = "UPDATE visit SET veterinarian_id = ?, visit_date = ?, diagnosis = ?, treatment = ?, doctor_comments = ? WHERE id = ?";
+        jdbcTemplate.update(sql, visit.getVeterinarianId(), new java.sql.Date(visit.getVisitDate().getTime()), visit.getDiagnosis(), visit.getTreatment(), visit.getDoctorComments(), visit.getId());
     }
+
 
     public void deleteVisit(Long id) {
         // Обновление внешних ключей на null, если есть
@@ -188,12 +194,18 @@ public class Repository {
         jdbcTemplate.update(deleteSql, id);
     }
 
+    public List<Visit> getAllVisits() {
+        String sql = "SELECT v.*, p.passport_number FROM visit v JOIN pet p ON v.pet_id = p.id";
+        return jdbcTemplate.query(sql, new VisitRowMapper());
+    }
+
     private static class VisitRowMapper implements RowMapper<Visit> {
         @Override
         public Visit mapRow(ResultSet rs, int rowNum) throws SQLException {
             Visit visit = new Visit();
             visit.setId(rs.getLong("id"));
             visit.setPetId(rs.getLong("pet_id"));
+            visit.setPetPassport(rs.getString("passport_number")); // Установка паспорта животного
             visit.setVeterinarianId(rs.getLong("veterinarian_id"));
             visit.setVisitDate(rs.getDate("visit_date"));
             visit.setDiagnosis(rs.getString("diagnosis"));
@@ -202,6 +214,7 @@ public class Repository {
             return visit;
         }
     }
+
 
     public List<Veterinarian> getAllVeterinarians() {
         String sql = "SELECT * FROM veterinarian";

@@ -18,7 +18,7 @@
     <nav>
       <ul>
         <li><a href="index.html" class="toggle-sidebar"><i class="fas fa-calendar-alt"></i> Визиты</a></li>
-        <li><a href="index.html" id="petOwnersButton"><i class="fas fa-user"></i> Владельцы Животных</a></li>
+        <li><a href="pet_owners.html" id="petOwnersButton"><i class="fas fa-user"></i> Владельцы Животных</a></li>
         <li><a href="#pets"><i class="fas fa-paw"></i> Животные</a></li>
         <li><a href="#veterinarians"><i class="fas fa-user-md"></i> Ветеринары</a></li>
       </ul>
@@ -32,6 +32,7 @@
     </header>
 
     <main>
+
       <div class="search-bar">
         <input type="text" id="search" placeholder="Поиск...">
       </div>
@@ -61,11 +62,9 @@
 
 <!-- Модальное окно для редактирования визита -->
 <div id="editVisitModal" class="modal">
+  <div class="modal-content">
   <form id="editVisitForm">
-    <div>
-      <label for="editPetId">ID Животного:</label>
-      <input type="text" id="editPetId" name="petId" required>
-    </div>
+
     <div>
       <label for="editVeterinarianId">ID Ветеринара:</label>
       <input type="text" id="editVeterinarianId" name="veterinarianId" required>
@@ -90,34 +89,23 @@
       <button type="submit">Сохранить</button>
       <button type="button" id="cancelEditButton">Отмена</button>
     </div>
+
   </form>
+  </div>
 </div>
 
-<!-- Модальное окно для добавления визита -->
 <div id="addVisitModal" class="modal">
   <div class="modal-content">
-    <span id="closeAddVisitModal" class="close">&times;</span>
     <h2>Добавить визит</h2>
     <form id="addVisitForm">
-      <label for="addPetId">ID Животного:</label>
-      <input type="number" id="addPetId" name="petId" required>
-
-      <label for="addVeterinarianId">ID Ветеринара:</label>
-      <input type="number" id="addVeterinarianId" name="veterinarianId" required>
-
-      <label for="addVisitDate">Дата визита:</label>
-      <input type="date" id="addVisitDate" name="visitDate" required>
-
-      <label for="addDiagnosis">Диагноз:</label>
-      <input type="text" id="addDiagnosis" name="diagnosis" required>
-
-      <label for="addTreatment">Лечение:</label>
-      <input type="text" id="addTreatment" name="treatment" required>
-
-      <label for="addDoctorComments">Комментарии Доктора:</label>
-      <textarea id="addDoctorComments" name="doctorComments"></textarea>
-
-      <button type="submit">Добавить визит</button>
+      <input type="text" id="addPetPassport" placeholder="Паспорт животного" required>
+      <input type="text" id="addVeterinarianId" placeholder="ID ветеринара" required>
+      <input type="date" id="addVisitDate" placeholder="Дата визита" required>
+      <input type="text" id="addDiagnosis" placeholder="Диагноз" required>
+      <input type="text" id="addTreatment" placeholder="Лечение" required>
+      <input type="text" id="addDoctorComments" placeholder="Комментарии доктора" required>
+      <button type="submit">Добавить</button>
+      <button type="button" id="closeAddVisitModal">Отмена</button>
     </form>
   </div>
 </div>

@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeAddVisitModal = document.getElementById('closeAddVisitModal');
     const addVisitForm = document.getElementById('addVisitForm');
 
-
     // Open the modal when the "+" button is clicked
     addVisitButton.addEventListener('click', function() {
         addVisitModal.style.display = 'block';
@@ -40,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
         currentVisit = visit;
 
         // Заполняем поля формы данными визита
+        document.getElementById('editVeterinarianId').value = visit.veterinarianId || '';
+        document.getElementById('editVisitDate').value = visit.visitDate ? new Date(visit.visitDate).toISOString().split('T')[0] : '';
         document.getElementById('editDiagnosis').value = visit.diagnosis || '';
         document.getElementById('editTreatment').value = visit.treatment || '';
         document.getElementById('editDoctorComments').value = visit.doctorComments || '';
@@ -47,8 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Открытие модального окна
         editVisitModal.style.display = 'block';
     }
-
-
 
     cancelEditButton.addEventListener('click', () => {
         editVisitModal.style.display = 'none';
@@ -121,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <button class="edit-button"><i class="fas fa-edit"></i></button>
                         <h3>Визит от ${new Date(visit.visitDate).toLocaleDateString()}</h3>
                         <div class="visit-info">
-                            <div><label>ID Животного:</label> <span>${visit.petId}</span></div>
+                            <div><label>Паспорт животного:</label> <span>${visit.petPassport}</span></div>
                             <div><label>ID Ветеринара:</label> <span>${visit.veterinarianId}</span></div>
                             <div><label>Диагноз:</label> <span>${visit.diagnosis}</span></div>
                             <div><label>Лечение:</label> <span>${visit.treatment}</span></div>
@@ -148,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const updatedVisit = {
             id: currentVisit.id,  // Убедитесь, что отправляете ID визита
-            petId: document.getElementById('editPetId').value,
             veterinarianId: document.getElementById('editVeterinarianId').value,
             visitDate: document.getElementById('editVisitDate').value, // Дата визита
             diagnosis: document.getElementById('editDiagnosis').value,
@@ -180,17 +178,26 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Ошибка при обновлении визита. Проверьте консоль для подробностей.');
         });
     });
-     // Submit the form to add a new visit
-        addVisitForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from reloading the page
 
+    // Submit the form to add a new visit
+    addVisitForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from reloading the page
+
+        const addPetPassport = document.getElementById('addPetPassport');
+        const addVeterinarianId = document.getElementById('addVeterinarianId');
+        const addVisitDate = document.getElementById('addVisitDate');
+        const addDiagnosis = document.getElementById('addDiagnosis');
+        const addTreatment = document.getElementById('addTreatment');
+        const addDoctorComments = document.getElementById('addDoctorComments');
+
+        if (addPetPassport && addVeterinarianId && addVisitDate && addDiagnosis && addTreatment && addDoctorComments) {
             const newVisit = {
-                petId: document.getElementById('addPetId').value,
-                veterinarianId: document.getElementById('addVeterinarianId').value,
-                visitDate: document.getElementById('addVisitDate').value,
-                diagnosis: document.getElementById('addDiagnosis').value,
-                treatment: document.getElementById('addTreatment').value,
-                doctorComments: document.getElementById('addDoctorComments').value
+                petPassport: addPetPassport.value,
+                veterinarianId: addVeterinarianId.value,
+                visitDate: addVisitDate.value,
+                diagnosis: addDiagnosis.value,
+                treatment: addTreatment.value,
+                doctorComments: addDoctorComments.value
             };
 
             // Send the data to the backend via POST request
@@ -216,14 +223,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Ошибка при добавлении визита:', error);
                 alert('Ошибка при добавлении визита. Проверьте консоль для подробностей.');
             });
-        });
+        } else {
+            alert('Ошибка: Один или несколько элементов формы не найдены.');
+        }
+    });
 
-        // Close the modal when clicking outside of it
-        window.addEventListener('click', function(event) {
-            if (event.target === addVisitModal) {
-                addVisitModal.style.display = 'none';
-            }
-        });
+    // Close the modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === addVisitModal) {
+            addVisitModal.style.display = 'none';
+        }
+    });
+
     // Загрузка визитов при загрузке страницы
     fetchVisits();
 });

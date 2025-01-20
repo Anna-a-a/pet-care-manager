@@ -5,6 +5,7 @@ import java.util.Date;
 public class Visit {
     private Long id;
     private Long petId;
+    private String petPassport;
     private Long veterinarianId;
     private Date visitDate;
     private String diagnosis;
@@ -26,6 +27,14 @@ public class Visit {
 
     public void setPetId(Long petId) {
         this.petId = petId;
+    }
+
+    public String getPetPassport() {
+        return petPassport;
+    }
+
+    public void setPetPassport(String petPassport) {
+        this.petPassport = petPassport;
     }
 
     public Long getVeterinarianId() {

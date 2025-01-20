@@ -18,7 +18,7 @@ public class Service {
     public PetOwner getPetOwner(Long id) {
         return repository.getPetOwner(id).orElseThrow(() -> new RuntimeException("PetOwner not found"));
     }
-    
+
     public List<PetOwner> getAllPetOwners() {
         return repository.getAllPetOwners();
     }
@@ -51,6 +51,7 @@ public class Service {
         return repository.getAllVisits();
     }
 
+
     public Visit getVisitById(Long id) {
         return repository.getVisitById(id);
     }
@@ -62,6 +63,7 @@ public class Service {
     public void updateVisit(Visit visit) {
         repository.updateVisit(visit);
     }
+
 
     public void deleteVisit(Long id) {
         repository.deleteVisit(id);
