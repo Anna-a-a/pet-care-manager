@@ -226,7 +226,10 @@ public class Repository {
     }
 
     public List<Visit> getAllVisits() {
-        String sql = "SELECT v.*, p.passport_number FROM visit v JOIN pet p ON v.pet_id = p.id";
+        String sql = "SELECT v.*, p.passport_number\n" +
+                "FROM visit v\n" +
+                "JOIN pet p ON v.pet_id = p.id\n" +
+                "ORDER BY v.visit_date DESC;\n";
         return jdbcTemplate.query(sql, new VisitRowMapper());
     }
 

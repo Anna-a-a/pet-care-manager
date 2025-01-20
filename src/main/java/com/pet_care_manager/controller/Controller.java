@@ -35,7 +35,7 @@ public class Controller {
 
 
 
-    @PostMapping("/petOwner")
+    @PostMapping("/addPetOwner")
     public ResponseEntity<PetOwner> createPetOwner(@RequestBody PetOwner petOwner) {
         PetOwner createdPetOwner = service.createPetOwner(petOwner);
         return ResponseEntity.ok(createdPetOwner);
